@@ -1,6 +1,7 @@
 package com.jexk.identity_service.controller;
 
 import com.jexk.identity_service.dto.request.UserCreationRequest;
+import com.jexk.identity_service.dto.request.UserUpdateRequest;
 import com.jexk.identity_service.entity.User;
 import com.jexk.identity_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/users")
+    @PostMapping()
     User createUser(@RequestBody UserCreationRequest request) {
         return userService.createUser(request);
     }
@@ -26,5 +28,16 @@ public class UserController {
     @GetMapping("/{userId}")
     User getUser(@PathVariable("userId") String userId) {
         return userService.getUserById(userId);
+    }
+
+    @PutMapping("/{userId}")
+    User updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+        return userService.updateUser(userId, request);
+    }
+
+    @DeleteMapping("/{userId}")
+    String deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+        return "user has been deleted!";
     }
 }

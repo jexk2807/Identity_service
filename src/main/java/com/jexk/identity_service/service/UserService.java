@@ -1,6 +1,7 @@
 package com.jexk.identity_service.service;
 
 import com.jexk.identity_service.dto.request.UserCreationRequest;
+import com.jexk.identity_service.dto.request.UserUpdateRequest;
 import com.jexk.identity_service.entity.User;
 import com.jexk.identity_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,19 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
-    public User getUserById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found")) ;
+    public User getUserById(String userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")) ;
+    }
+
+    public User updateUser(String userId , UserUpdateRequest request) {
+        User user = getUserById(userId);
+        user.setFirstName(request.getFirstName());
+        user.setDob(request.getDob());
+
+        return user ;
+    }
+
+    public void deleteUser(String userId){
+        userRepository.deleteById(userId);
     }
 }
