@@ -17,7 +17,14 @@ public class UserService {
 
     public User createUser(UserCreationRequest request) {
         User user = new User();
+
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new RuntimeException("user not exist !");
+
+        user.setUsername(request.getUsername());
         user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPassword(request.getPassword());
         user.setDob(request.getDob());
         return userRepository.save(user);
     }
@@ -26,19 +33,20 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
     public User getUserById(String userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")) ;
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public User updateUser(String userId , UserUpdateRequest request) {
+    public User updateUser(String userId, UserUpdateRequest request) {
         User user = getUserById(userId);
         user.setFirstName(request.getFirstName());
         user.setDob(request.getDob());
 
-        return user ;
+        return user;
     }
 
-    public void deleteUser(String userId){
+    public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
 }
